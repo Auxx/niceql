@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<table name="items" withPrimaryKey="true">
+    <column name="title" type="TEXT" />
+    <column name="text" type="TEXT" />
+    <column name="order_key" type="INTEGER" notNull="true" />
+</table>
