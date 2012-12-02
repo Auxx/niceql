@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<table name="items" withPrimaryKey="true">
-    <column name="title" type="TEXT" />
-    <column name="text" type="TEXT" />
-    <column name="order_key" type="INTEGER" notNull="true" />
+<table name="currency_rates" withPrimaryKey="true">
+    <column name="currency" type="TEXT" notNull="true" />
+    <column name="base" type="TEXT" notNull="true" />
+    <column name="units" type="INTEGER" notNull="true" />
+    <column name="rate" type="REAL" notNull="true" />
+    <column name="date" type="REAL" notNull="true" />
+    <column name="bank_id" type="INTEGER" notNull="true" />
+    <index name="idx_currency_to_bank" isUnique="true">
+    </index>
 </table>

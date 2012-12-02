@@ -21,6 +21,10 @@ public class TableBuilder {
 			columns.add(new Column());
 	}
 
+	public String getName() {
+		return(name);
+	}
+
 	public void addColumn(Column column) {
 		columns.add(column);
 	}

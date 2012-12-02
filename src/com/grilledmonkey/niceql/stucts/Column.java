@@ -37,12 +37,16 @@ public class Column {
 
 	public String getName(boolean escapeSql) {
 		if(escapeSql)
-			return('"' + name + '"');
+			return(escape(name));
 		else
 			return(name);
 	}
 
 	public String getNameEscaped() {
-		return(getName(true));
+		return(escape(name));
+	}
+
+	public static String escape(String value) {
+		return('"' + value + '"');
 	}
 }

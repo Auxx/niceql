@@ -8,7 +8,7 @@ import android.text.TextUtils;
 public class Index {
 	private final String name, table;
 	private final boolean isUnique;
-	private final List<Column> columns = new ArrayList<Column>();
+	private final List<Object> columns = new ArrayList<Object>();
 
 	public Index(String name, String table, boolean isUnique) {
 		this.name = name;
@@ -23,6 +23,10 @@ public class Index {
 	}
 
 	public void addColumn(Column column) {
+		columns.add(column);
+	}
+
+	public void addColumn(String column) {
 		columns.add(column);
 	}
 
@@ -41,8 +45,13 @@ public class Index {
 
 		int size = columns.size();
 		String[] columnSql = new String[size];
-		for(int i = 0; i < size; i++)
-			columnSql[i] = columns.get(i).getNameEscaped();
+		for(int i = 0; i < size; i++) {
+			Object item = columns.get(i);
+			if(item instanceof String)
+				columnSql[i] = Column.escape((String)item);
+			else if(item instanceof Column)
+				columnSql[i] = ((Column)columns.get(i)).getNameEscaped();
+		}
 		result.append(TextUtils.join(", ", columnSql));
 
 		result.append(");");
