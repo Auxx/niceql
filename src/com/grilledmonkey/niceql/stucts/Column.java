@@ -34,4 +34,15 @@ public class Column {
 			result.append(" NOT NULL");
 		return(result.toString());
 	}
+
+	public String getName(boolean escapeSql) {
+		if(escapeSql)
+			return('"' + name + '"');
+		else
+			return(name);
+	}
+
+	public String getNameEscaped() {
+		return(getName(true));
+	}
 }
