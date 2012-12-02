@@ -33,6 +33,10 @@ public class TableBuilder {
 		indices.add(index);
 	}
 
+	public List<Column> getColumns() {
+		return(columns);
+	}
+
 	public String getSql() {
 		StringBuilder result = new StringBuilder("CREATE TABLE " + name + "(");
 

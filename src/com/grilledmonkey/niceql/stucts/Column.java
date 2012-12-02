@@ -4,6 +4,7 @@ public class Column {
 	private final String name, type;
 	private final boolean notNull;
 	private final boolean isPrimary;
+	private int intType;
 
 	public static final String PRIMARY_KEY = "_id";
 	public static final String INTEGER = "INTEGER";
@@ -11,11 +12,18 @@ public class Column {
 	public static final String REAL = "REAL";
 	public static final String BLOB = "BLOB";
 
+	public static final int TYPE_UNDEFINED = 0;
+	public static final int TYPE_INTEGER = 1;
+	public static final int TYPE_TEXT = 2;
+	public static final int TYPE_REAL = 3;
+	public static final int TYPE_BLOB = 4;
+
 	public Column() {
 		this.name = PRIMARY_KEY;
 		this.type = INTEGER;
 		this.notNull = false;
 		this.isPrimary = true;
+		syncType();
 	}
 
 	public Column(String name, String type, boolean notNull) {
@@ -23,6 +31,7 @@ public class Column {
 		this.type = type;
 		this.notNull = notNull;
 		this.isPrimary = false;
+		syncType();
 	}
 
 	public String getSql() {
@@ -35,11 +44,16 @@ public class Column {
 		return(result.toString());
 	}
 
-	public String getName(boolean escapeSql) {
-		if(escapeSql)
-			return(escape(name));
-		else
-			return(name);
+	public String getName() {
+		return(name);
+	}
+
+	public String getType() {
+		return(type);
+	}
+
+	public int getIntType() {
+		return(intType);
 	}
 
 	public String getNameEscaped() {
@@ -48,5 +62,16 @@ public class Column {
 
 	public static String escape(String value) {
 		return('"' + value + '"');
+	}
+
+	private void syncType() {
+		if(INTEGER.equals(type))
+			intType = TYPE_INTEGER;
+		else if(TEXT.equals(type))
+			intType = TYPE_TEXT;
+		else if(REAL.equals(type))
+			intType = TYPE_REAL;
+		else if(BLOB.equals(type))
+			intType = TYPE_BLOB;
 	}
 }
