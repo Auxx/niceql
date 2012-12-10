@@ -122,7 +122,7 @@ public class QueryBuilder {
 				break;
 
 			case DELETE:
-				result.append("SELECT FROM ");
+				result.append("DELETE FROM ");
 				result.append(table);
 				result.append(getWhere());
 				result.append(getOrderSql());
