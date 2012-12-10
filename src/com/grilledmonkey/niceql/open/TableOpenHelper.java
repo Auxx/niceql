@@ -1,5 +1,7 @@
 package com.grilledmonkey.niceql.open;
 
+import java.util.List;
+
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -21,7 +23,9 @@ public class TableOpenHelper extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		if(table != null) {
-			db.execSQL(table.getSql());
+			List<String> queryList = table.getSql();
+			for(String query: queryList)
+				db.execSQL(query);
 		}
 		else
 			return; // TODO Throw exception

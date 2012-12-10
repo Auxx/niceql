@@ -1,6 +1,7 @@
 package com.grilledmonkey.niceql.builders;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import android.text.TextUtils;
@@ -37,7 +38,9 @@ public class TableBuilder {
 		return(columns);
 	}
 
-	public String getSql() {
+	public List<String> getSql() {
+		List<String> queryList = new LinkedList<String>();
+
 		StringBuilder result = new StringBuilder("CREATE TABLE " + name + "(");
 
 		int size = columns.size();
@@ -47,16 +50,14 @@ public class TableBuilder {
 		result.append(TextUtils.join(", ", columnSql));
 
 		result.append(");");
+		queryList.add(result.toString());
 
 		if(indices.size() > 0) {
-			result.append("\n");
 			size = indices.size();
-			columnSql = new String[size];
 			for(int i = 0; i < size; i++)
-				columnSql[i] = indices.get(i).getSql();
-			result.append(TextUtils.join("\n", columnSql));
+				queryList.add(indices.get(i).getSql());
 		}
 
-		return(result.toString());
+		return(queryList);
 	}
 }

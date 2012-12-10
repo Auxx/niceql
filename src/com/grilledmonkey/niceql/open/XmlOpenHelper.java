@@ -29,9 +29,9 @@ public class XmlOpenHelper extends TableOpenHelper {
 		super(context, databaseName, table);
 	}
 
-	public String getSql() {
-		return(table.getSql());
-	}
+	//	public List<String> getSql() {
+	//		return(table.getSql());
+	//	}
 
 	public static XmlOpenHelper parse(Context context, String databaseName, int xmlId) {
 		return(parse(context, databaseName, context.getResources().getXml(xmlId)));
