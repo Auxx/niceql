@@ -20,6 +20,10 @@ public class TableOpenHelper extends SQLiteOpenHelper {
 		this.table = table;
 	}
 
+	public String getTableName() {
+		return(table.getName());
+	}
+
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		if(table != null) {

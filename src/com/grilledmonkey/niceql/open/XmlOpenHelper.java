@@ -25,6 +25,8 @@ public class XmlOpenHelper extends TableOpenHelper {
 	private static final String ATTR_INDEX_IS_UNIQUE = "isUnique";
 	private static final String VALUE_TRUE = "true";
 
+//	private String tableName;
+
 	protected XmlOpenHelper(Context context, String databaseName, TableBuilder table) {
 		super(context, databaseName, table);
 	}
