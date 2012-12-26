@@ -2,6 +2,7 @@ package com.grilledmonkey.niceql.open;
 
 import java.util.List;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -30,6 +31,11 @@ public class TableOpenHelper extends SQLiteOpenHelper {
 			List<String> queryList = table.getSql();
 			for(String query: queryList)
 				db.execSQL(query);
+			List<ContentValues> seeds = table.getSeeds();
+			if(seeds.size() > 0) {
+				for(ContentValues item: seeds)
+					db.insert(table.getName(), null, item);
+			}
 		}
 		else
 			return; // TODO Throw exception

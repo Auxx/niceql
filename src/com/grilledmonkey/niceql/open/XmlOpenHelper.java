@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.util.Log;
 
@@ -16,6 +17,7 @@ public class XmlOpenHelper extends TableOpenHelper {
 	private static final String ROOT_TAG = "table";
 	private static final String COLUMN_TAG = "column";
 	private static final String INDEX_TAG = "index";
+	private static final String SEED_TAG = "seed";
 	private static final String ATTR_TABLE_NAME = "name";
 	private static final String ATTR_TABLE_WITH_PK = "withPrimaryKey";
 	private static final String ATTR_COLUMN_NAME = "name";
@@ -86,6 +88,9 @@ public class XmlOpenHelper extends TableOpenHelper {
 			else if(INDEX_TAG.equals(tagName)) {
 				processIndex(xml);
 			}
+			else if(SEED_TAG.equals(tagName)) {
+				processSeed(xml);
+			}
 		}
 	}
 
@@ -119,4 +124,34 @@ public class XmlOpenHelper extends TableOpenHelper {
 			}
 		}
 	}
+
+	protected void processSeed(XmlPullParser xml) throws XmlPullParserException, IOException {
+		ContentValues seed = new ContentValues();
+		processSeedColumns(xml, seed);
+		if(seed.size() > 0)
+			table.addSeed(seed);
+	}
+
+	protected void processSeedColumns(XmlPullParser xml, ContentValues seed) throws XmlPullParserException, IOException {
+		int eventType;
+		String columnName = null;
+		while((eventType = xml.next()) != XmlPullParser.END_DOCUMENT) {
+			int depth = xml.getDepth();
+			switch(eventType) {
+				case XmlPullParser.START_TAG:
+					if(depth == 3 && COLUMN_TAG.equals(xml.getName()))
+						columnName = xml.getAttributeValue(null, ATTR_COLUMN_NAME);
+					break;
+				case XmlPullParser.TEXT:
+					if(columnName != null)
+						seed.put(columnName, xml.getText());
+					break;
+				case XmlPullParser.END_TAG:
+					if(depth == 2)
+						break;
+					break;
+			}
+		}
+	}
+
 }

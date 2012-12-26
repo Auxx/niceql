@@ -1,9 +1,9 @@
 package com.grilledmonkey.niceql.builders;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import android.content.ContentValues;
 import android.text.TextUtils;
 
 import com.grilledmonkey.niceql.stucts.Column;
@@ -11,13 +11,12 @@ import com.grilledmonkey.niceql.stucts.Index;
 
 public class TableBuilder {
 	private final String name;
-	private final List<Column> columns;
-	private final List<Index> indices;
+	private final List<Column> columns = new LinkedList<Column>();
+	private final List<Index> indices = new LinkedList<Index>();
+	private final List<ContentValues> seeds = new LinkedList<ContentValues>();
 
 	public TableBuilder(String name, boolean withPrimaryKey) {
 		this.name = name;
-		indices = new ArrayList<Index>();
-		columns = new ArrayList<Column>();
 		if(withPrimaryKey)
 			columns.add(new Column());
 	}
@@ -34,8 +33,16 @@ public class TableBuilder {
 		indices.add(index);
 	}
 
+	public void addSeed(ContentValues seed) {
+		seeds.add(seed);
+	}
+
 	public List<Column> getColumns() {
 		return(columns);
+	}
+
+	public List<ContentValues> getSeeds() {
+		return(seeds);
 	}
 
 	public List<String> getSql() {
@@ -57,6 +64,14 @@ public class TableBuilder {
 			for(int i = 0; i < size; i++)
 				queryList.add(indices.get(i).getSql());
 		}
+
+//		if(seeds.size() > 0) {
+//			size = seeds.size();
+//			for(int i = 0; i < size; i++) {
+//
+////				queryList.add(seeds.get(i).getSql());
+//			}
+//		}
 
 		return(queryList);
 	}
