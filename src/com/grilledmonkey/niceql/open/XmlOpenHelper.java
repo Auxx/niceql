@@ -1,19 +1,14 @@
 package com.grilledmonkey.niceql.open;
 
-import java.io.IOException;
-
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-
-import android.content.ContentValues;
 import android.content.Context;
-import android.util.Log;
 
-import com.grilledmonkey.niceql.builders.TableBuilder;
-import com.grilledmonkey.niceql.stucts.Column;
-import com.grilledmonkey.niceql.stucts.Index;
 
 public class XmlOpenHelper extends TableOpenHelper {
+	public XmlOpenHelper(Context context, String databaseName) {
+		super(context, databaseName);
+		// TODO Auto-generated constructor stub
+	}
+
 	private static final String ROOT_TAG = "table";
 	private static final String COLUMN_TAG = "column";
 	private static final String INDEX_TAG = "index";
@@ -26,7 +21,7 @@ public class XmlOpenHelper extends TableOpenHelper {
 	private static final String ATTR_INDEX_NAME = "name";
 	private static final String ATTR_INDEX_IS_UNIQUE = "isUnique";
 	private static final String VALUE_TRUE = "true";
-
+/*
 //	private String tableName;
 
 	protected XmlOpenHelper(Context context, String databaseName, TableBuilder table) {
@@ -153,5 +148,5 @@ public class XmlOpenHelper extends TableOpenHelper {
 			}
 		}
 	}
-
+*/
 }
