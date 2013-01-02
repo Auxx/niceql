@@ -5,24 +5,49 @@ import java.util.List;
 
 import android.text.TextUtils;
 
-public class Index {
+import com.grilledmonkey.niceql.interfaces.SqlColumn;
+import com.grilledmonkey.niceql.interfaces.SqlIndex;
+
+/**
+ * Instances of this class represent definition for single SQLite index
+ * in a very simple way. Only name, table, columns and uniqueness can
+ * be specified.
+ *
+ * @author Aux
+ *
+ */
+
+public class Index implements SqlIndex {
 	private final String name, table;
 	private final boolean isUnique;
 	private final List<Object> columns = new ArrayList<Object>();
 
+	/**
+	 * Creates empty index with specified attributes. Use addColumn() method
+	 * to add columns to index.
+	 *
+	 * @param name of index
+	 * @param table for which index is created
+	 * @param isUnique indicates if index is unique
+	 */
 	public Index(String name, String table, boolean isUnique) {
 		this.name = name;
 		this.table = table;
 		this.isUnique = isUnique;
 	}
 
+	/**
+	 * Creates empty index with specified attributes. Index created this way
+	 * will not be unique. Use addColumn() method to add columns to index.
+	 *
+	 * @param name of index
+	 * @param table for which index is created
+	 */
 	public Index(String name, String table) {
-		this.name = name;
-		this.table = table;
-		this.isUnique = false;
+		this(name, table, false);
 	}
 
-	public void addColumn(Column column) {
+	public void addColumn(SqlColumn column) {
 		columns.add(column);
 	}
 
@@ -30,6 +55,23 @@ public class Index {
 		columns.add(column);
 	}
 
+	public String getName() {
+		return(name);
+	}
+
+	public String getTableName() {
+		return(table);
+	}
+
+	public boolean isUnique() {
+		return(isUnique);
+	}
+
+	/**
+	 * Returns SQL statement for current index.
+	 *
+	 * @return generated SQL code
+	 */
 	public String getSql() {
 		if(columns.size() == 0)
 			return(null);
@@ -48,9 +90,9 @@ public class Index {
 		for(int i = 0; i < size; i++) {
 			Object item = columns.get(i);
 			if(item instanceof String)
-				columnSql[i] = Column.escape((String)item);
-			else if(item instanceof Column)
-				columnSql[i] = ((Column)columns.get(i)).getNameEscaped();
+				columnSql[i] = SqlColumn.escape((String)item);
+			else if(item instanceof SqlColumn)
+				columnSql[i] = ((SqlColumn)columns.get(i)).getNameEscaped();
 		}
 		result.append(TextUtils.join(", ", columnSql));
 
