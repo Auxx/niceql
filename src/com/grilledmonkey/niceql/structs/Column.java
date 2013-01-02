@@ -87,7 +87,7 @@ public class Column extends SqlColumn {
 	 * @return generated SQL code
 	 */
 	public String getSql() {
-		StringBuilder result = new StringBuilder(name);
+		StringBuilder result = new StringBuilder(getNameEscaped());
 		result.append(" " + type);
 		if(isPrimary)
 			result.append("  PRIMARY KEY AUTOINCREMENT");
