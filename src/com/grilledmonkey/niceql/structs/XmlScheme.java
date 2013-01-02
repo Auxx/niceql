@@ -100,7 +100,14 @@ public class XmlScheme extends Scheme {
 		int eventType = xml.getEventType();
 		while(eventType != XmlPullParser.END_DOCUMENT) {
 			switch(eventType) {
-				case XmlPullParser.CDSECT:
+				case XmlPullParser.START_TAG:
+					Log.i("NQL", "START_TAG: <" + xml.getName() + ">");
+
+					if(ROOT_TAG.equals(xml.getName()))
+						result = parseRoot(version, xml);
+					break;
+
+				/*case XmlPullParser.CDSECT:
 					Log.i("NQL", "CDSECT");
 					break;
 				case XmlPullParser.COMMENT:
@@ -127,15 +134,10 @@ public class XmlScheme extends Scheme {
 				case XmlPullParser.START_DOCUMENT:
 					Log.i("NQL", "START_DOCUMENT");
 					break;
-				case XmlPullParser.START_TAG:
-					Log.i("NQL", "START_TAG: <" + xml.getName() + ">");
 
-					if(ROOT_TAG.equals(xml.getName()))
-						result = parseRoot(version, xml);
-					break;
 				case XmlPullParser.TEXT:
 					Log.i("NQL", "TEXT: " + xml.getText());
-					break;
+					break;*/
 			}
 			eventType = xml.next();
 		}
