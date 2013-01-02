@@ -7,6 +7,7 @@ import android.text.TextUtils;
 
 import com.grilledmonkey.niceql.interfaces.SqlColumn;
 import com.grilledmonkey.niceql.interfaces.SqlIndex;
+import com.grilledmonkey.niceql.interfaces.SqlTable;
 
 /**
  * Instances of this class represent definition for single SQLite index
@@ -39,6 +40,18 @@ public class Index implements SqlIndex {
 	}
 
 	/**
+	 * Creates empty index with specified attributes. Use addColumn() method
+	 * to add columns to index.
+	 *
+	 * @param name of index
+	 * @param table for which index is created
+	 * @param isUnique indicates if index is unique
+	 */
+	public Index(String name, SqlTable table, boolean isUnique) {
+		this(name, table.getName(), isUnique);
+	}
+
+	/**
 	 * Creates empty index with specified attributes. Index created this way
 	 * will not be unique. Use addColumn() method to add columns to index.
 	 *
@@ -47,6 +60,17 @@ public class Index implements SqlIndex {
 	 */
 	public Index(String name, String table) {
 		this(name, table, false);
+	}
+
+	/**
+	 * Creates empty index with specified attributes. Index created this way
+	 * will not be unique. Use addColumn() method to add columns to index.
+	 *
+	 * @param name of index
+	 * @param table for which index is created
+	 */
+	public Index(String name, SqlTable table) {
+		this(name, table.getName(), false);
 	}
 
 	public void addColumn(SqlColumn column) {
