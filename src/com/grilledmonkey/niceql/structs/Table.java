@@ -1,4 +1,4 @@
-package com.grilledmonkey.niceql.builders;
+package com.grilledmonkey.niceql.structs;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -6,16 +6,13 @@ import java.util.List;
 import android.content.ContentValues;
 import android.text.TextUtils;
 
-import com.grilledmonkey.niceql.stucts.Column;
-import com.grilledmonkey.niceql.stucts.Index;
-
-public class TableBuilder {
+public class Table {
 	private final String name;
 	private final List<Column> columns = new LinkedList<Column>();
 	private final List<Index> indices = new LinkedList<Index>();
 	private final List<ContentValues> seeds = new LinkedList<ContentValues>();
 
-	public TableBuilder(String name, boolean withPrimaryKey) {
+	public Table(String name, boolean withPrimaryKey) {
 		this.name = name;
 		if(withPrimaryKey)
 			columns.add(new Column());

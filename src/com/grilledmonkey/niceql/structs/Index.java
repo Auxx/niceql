@@ -1,4 +1,4 @@
-package com.grilledmonkey.niceql.stucts;
+package com.grilledmonkey.niceql.structs;
 
 import java.util.ArrayList;
 import java.util.List;
