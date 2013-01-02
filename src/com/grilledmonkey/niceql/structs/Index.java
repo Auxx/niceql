@@ -12,6 +12,8 @@ import com.grilledmonkey.niceql.interfaces.SqlIndex;
  * Instances of this class represent definition for single SQLite index
  * in a very simple way. Only name, table, columns and uniqueness can
  * be specified.
+ * <p>
+ * <b>Warning!</b> No error checks are performed!
  *
  * @author Aux
  *
