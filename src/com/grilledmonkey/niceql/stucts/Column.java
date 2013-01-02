@@ -1,6 +1,6 @@
 package com.grilledmonkey.niceql.stucts;
 
-import com.grilledmonkey.niceql.interfaces.SqlStatement;
+import com.grilledmonkey.niceql.interfaces.SqlColumn;
 
 /**
  * Instances of this class represent definition for single SQLite table column.
@@ -22,23 +22,10 @@ import com.grilledmonkey.niceql.interfaces.SqlStatement;
  *
  */
 
-public class Column implements SqlStatement {
+public class Column extends SqlColumn {
 	private final String name, type;
-	private final boolean notNull;
-	private final boolean isPrimary;
-	private int intType;
-
-	public static final String PRIMARY_KEY = "_id";
-	public static final String INTEGER = "INTEGER";
-	public static final String TEXT = "TEXT";
-	public static final String REAL = "REAL";
-	public static final String BLOB = "BLOB";
-
-	public static final int TYPE_UNDEFINED = 0;
-	public static final int TYPE_INTEGER = 1;
-	public static final int TYPE_TEXT = 2;
-	public static final int TYPE_REAL = 3;
-	public static final int TYPE_BLOB = 4;
+	private final boolean notNull, isPrimary;
+	private final int intType;
 
 	/**
 	 * Creates PRIMARY KEY for table definition
@@ -46,9 +33,9 @@ public class Column implements SqlStatement {
 	public Column() {
 		this.name = PRIMARY_KEY;
 		this.type = INTEGER;
+		this.intType = TYPE_INTEGER;
 		this.notNull = false;
 		this.isPrimary = true;
-		syncType();
 	}
 
 	/**
@@ -81,7 +68,17 @@ public class Column implements SqlStatement {
 		this.type = type;
 		this.notNull = notNull;
 		this.isPrimary = false;
-		syncType();
+
+		if(INTEGER.equals(type))
+			intType = TYPE_INTEGER;
+		else if(TEXT.equals(type))
+			intType = TYPE_TEXT;
+		else if(REAL.equals(type))
+			intType = TYPE_REAL;
+		else if(BLOB.equals(type))
+			intType = TYPE_BLOB;
+		else
+			intType = TYPE_UNDEFINED;
 	}
 
 	/**
@@ -99,62 +96,24 @@ public class Column implements SqlStatement {
 		return(result.toString());
 	}
 
-	/**
-	 * Returns name of column as it was passed in constructor.
-	 *
-	 * @return name of column
-	 */
 	public String getName() {
 		return(name);
 	}
 
-	/**
-	 * Returns type of column as it was passed in constructor.
-	 *
-	 * @return type of column
-	 */
 	public String getType() {
 		return(type);
 	}
 
-	/**
-	 * Returns type of column as it was passed in constructor as int value.
-	 * For switches and arrays (:
-	 *
-	 * @return numerical type of column
-	 */
 	public int getIntType() {
 		return(intType);
 	}
 
-	/**
-	 * Returns name of column in SQLite-escaped format.
-	 *
-	 * @return escaped column name
-	 */
+	public boolean isNotNull() {
+		return(notNull);
+	}
+
 	public String getNameEscaped() {
 		return(escape(name));
 	}
 
-	/**
-	 * Escapes any string like the name of column. Input string is NOT checked
-	 * for correct syntax.
-	 *
-	 * @param value any string
-	 * @return escaped value
-	 */
-	public static String escape(String value) {
-		return('"' + value + '"');
-	}
-
-	private void syncType() {
-		if(INTEGER.equals(type))
-			intType = TYPE_INTEGER;
-		else if(TEXT.equals(type))
-			intType = TYPE_TEXT;
-		else if(REAL.equals(type))
-			intType = TYPE_REAL;
-		else if(BLOB.equals(type))
-			intType = TYPE_BLOB;
-	}
 }
