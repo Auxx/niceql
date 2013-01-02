@@ -5,7 +5,7 @@ package com.grilledmonkey.niceql.interfaces;
  * initialize the way they want and must implement getters to retrieve
  * column related data.
  *
- * @author Sanya
+ * @author Aux
  *
  */
 
