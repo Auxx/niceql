@@ -82,6 +82,13 @@ public class Scheme implements SqlScheme {
 		tables.add(table);
 	}
 
+	/**
+	 * <b>WARNING!</b>
+	 * <p>
+	 * This is broken at the moment. Need to rethink the way it should
+	 * properly work. Right now just iterate through table definitions and
+	 * get seeds from each table separately.
+	 */
 	@Override
 	public List<ContentValues> getSeeds() {
 		List<ContentValues> result = new LinkedList<ContentValues>();
