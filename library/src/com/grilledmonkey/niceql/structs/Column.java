@@ -112,6 +112,10 @@ public class Column extends SqlColumn {
 		return(notNull);
 	}
 
+	public boolean isPrimary() {
+		return(isPrimary);
+	}
+
 	public String getNameEscaped() {
 		return(escape(name));
 	}
