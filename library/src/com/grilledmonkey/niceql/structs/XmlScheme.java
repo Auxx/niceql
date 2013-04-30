@@ -106,38 +106,6 @@ public class XmlScheme extends Scheme {
 					if(ROOT_TAG.equals(xml.getName()))
 						result = parseRoot(version, xml);
 					break;
-
-				/*case XmlPullParser.CDSECT:
-					Log.i("NQL", "CDSECT");
-					break;
-				case XmlPullParser.COMMENT:
-					Log.i("NQL", "COMMENT");
-					break;
-				case XmlPullParser.DOCDECL:
-					Log.i("NQL", "DOCDECL");
-					break;
-				case XmlPullParser.END_DOCUMENT:
-					Log.i("NQL", "END_DOCUMENT");
-					break;
-				case XmlPullParser.END_TAG:
-					Log.i("NQL", "END_TAG: </" + xml.getName() + ">");
-					break;
-				case XmlPullParser.ENTITY_REF:
-					Log.i("NQL", "ENTITY_REF");
-					break;
-				case XmlPullParser.IGNORABLE_WHITESPACE:
-					Log.i("NQL", "IGNORABLE_WHITESPACE");
-					break;
-				case XmlPullParser.PROCESSING_INSTRUCTION:
-					Log.i("NQL", "PROCESSING_INSTRUCTION");
-					break;
-				case XmlPullParser.START_DOCUMENT:
-					Log.i("NQL", "START_DOCUMENT");
-					break;
-
-				case XmlPullParser.TEXT:
-					Log.i("NQL", "TEXT: " + xml.getText());
-					break;*/
 			}
 			eventType = xml.next();
 		}
