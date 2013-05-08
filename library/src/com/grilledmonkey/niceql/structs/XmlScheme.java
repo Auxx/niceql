@@ -128,8 +128,9 @@ public class XmlScheme extends Scheme {
 		String xmlVersion = xml.getAttributeValue(null, VERSION_ATTR);
 		if(xmlVersion != null) {
 			v = toInt(xmlVersion);
-			if(v == null)
+			if(v == null) {
 				v = version;
+			}
 		}
 
 		Scheme result = new Scheme(v);
