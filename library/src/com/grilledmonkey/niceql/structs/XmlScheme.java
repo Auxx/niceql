@@ -31,6 +31,7 @@ public class XmlScheme extends Scheme {
 	private static final String COLUMN_TAG = "column";
 	private static final String INDEX_TAG = "index";
 	private static final String SEED_TAG = "seed";
+	private static final String REFERENCE_TAG = "reference";
 
 	private static final String VERSION_ATTR = "version";
 	private static final String NAME_ATTR = "name";
@@ -38,6 +39,8 @@ public class XmlScheme extends Scheme {
 	private static final String NOT_NULL_ATTR = "notNull";
 	private static final String IS_UNIQUE_ATTR = "isUnique";
 	private static final String WITH_PK_ATTR = "withPrimaryKey";
+	private static final String TABLE_ATTR = "table";
+	private static final String OPTIONS_ATTR = "options";
 
 	private static final String TRUE_VALUE = "true";
 
@@ -186,12 +189,29 @@ public class XmlScheme extends Scheme {
 	private static void parseColumn(Table table, XmlPullParser xml) throws XmlPullParserException, IOException {
 		String name = xml.getAttributeValue(null, NAME_ATTR);
 		String type = xml.getAttributeValue(null, TYPE_ATTR);
-		if(name != null && type != null)
-			table.addColumn(new Column(name, type, TRUE_VALUE.equals(xml.getAttributeValue(null, NOT_NULL_ATTR))));
+		Reference reference = null;
 
 		int eventType = xml.next();
-		while(eventType != XmlPullParser.END_TAG)
+		while(eventType != XmlPullParser.END_TAG) {
+			if(eventType == XmlPullParser.START_TAG) {
+				if(REFERENCE_TAG.equals(xml.getName())) {
+					reference = parseReference(xml);
+				}
+			}
 			eventType = xml.next();
+		}
+
+		if(name != null && type != null) {
+			Column column = new Column(name, type, TRUE_VALUE.equals(xml.getAttributeValue(null, NOT_NULL_ATTR)));
+			column.setReference(reference);
+			table.addColumn(column);
+		}
+	}
+
+	private static Reference parseReference(XmlPullParser xml) {
+		String table = xml.getAttributeValue(null, TABLE_ATTR);
+		String options = xml.getAttributeValue(null, OPTIONS_ATTR);
+		return(null);
 	}
 
 	private static void parseIndex(Table table, XmlPullParser xml) throws XmlPullParserException, IOException {
@@ -203,14 +223,16 @@ public class XmlScheme extends Scheme {
 		int eventType = xml.next();
 		while(eventType != XmlPullParser.END_TAG) {
 			if(eventType == XmlPullParser.START_TAG) {
-				if(COLUMN_TAG.equals(xml.getName()))
+				if(COLUMN_TAG.equals(xml.getName())) {
 					parseIndexColumn(index, xml);
+				}
 			}
 			eventType = xml.next();
 		}
 
-		if(index != null)
+		if(index != null) {
 			table.addIndex(index);
+		}
 	}
 
 	private static void parseSeed(Table table, XmlPullParser xml) throws XmlPullParserException, IOException {
