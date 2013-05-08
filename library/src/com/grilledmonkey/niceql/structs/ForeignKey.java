@@ -1,24 +1,20 @@
 package com.grilledmonkey.niceql.structs;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import android.text.TextUtils;
 
 import com.grilledmonkey.niceql.interfaces.SqlColumn;
+import com.grilledmonkey.niceql.interfaces.SqlForeignKey;
 import com.grilledmonkey.niceql.interfaces.SqlReference;
 
-public class Reference implements SqlReference {
-	private final String table, options;
-	private final List<Object> columns = new ArrayList<Object>();
+public class ForeignKey implements SqlForeignKey {
+	private final SqlReference reference;
+	private final List<Object> columns = new LinkedList<Object>();
 
-	public Reference(String table) {
-		this(table, null);
-	}
-
-	public Reference(String table, String options) {
-		this.table = table;
-		this.options = options;
+	public ForeignKey(SqlReference reference) {
+		this.reference = reference;
 	}
 
 	public void addColumn(SqlColumn column) {
@@ -29,25 +25,22 @@ public class Reference implements SqlReference {
 		columns.add(column);
 	}
 
-	public String getTableName() {
-		return(table);
+	public SqlReference getReference() {
+		return(reference);
 	}
 
-	public String getOptions() {
-		return(options);
-	}
-
-	/**
-	 * Returns SQL statement for current index.
-	 *
-	 * @return generated SQL code
-	 */
+	@Override
 	public String getSql() {
-		if(columns.size() == 0) {
+		if(columns.size() == 0 || reference == null) {
 			return(null);
 		}
 
-		StringBuilder result = new StringBuilder("REFERENCES ").append(table).append("(");
+		String refSql = reference.getSql();
+		if(refSql == null) {
+			return(null);
+		}
+
+		StringBuilder result = new StringBuilder("FOREIGN KEY(");
 
 		// TODO Refactor this shit
 		int size = columns.size();
@@ -59,12 +52,9 @@ public class Reference implements SqlReference {
 			else if(item instanceof SqlColumn)
 				columnSql[i] = ((SqlColumn)columns.get(i)).getNameEscaped();
 		}
-		result.append(TextUtils.join(", ", columnSql)).append(")");
-
-		if(!TextUtils.isEmpty(options)) {
-			result.append(" ").append(options);
-		}
+		result.append(TextUtils.join(", ", columnSql)).append(") ").append(refSql);
 
 		return(result.toString());
 	}
+
 }
