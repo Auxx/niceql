@@ -1,6 +1,7 @@
 package com.grilledmonkey.niceql.structs;
 
 import com.grilledmonkey.niceql.interfaces.SqlColumn;
+import com.grilledmonkey.niceql.interfaces.SqlReference;
 
 /**
  * Instances of this class represent definition for single SQLite table column.
@@ -26,6 +27,7 @@ public class Column extends SqlColumn {
 	private final String name, type;
 	private final boolean notNull, isPrimary;
 	private final int intType;
+	private SqlReference reference = null;
 
 	/**
 	 * Creates PRIMARY KEY for table definition
@@ -89,10 +91,21 @@ public class Column extends SqlColumn {
 	public String getSql() {
 		StringBuilder result = new StringBuilder(getNameEscaped());
 		result.append(" " + type);
-		if(isPrimary)
+
+		if(isPrimary) {
 			result.append("  PRIMARY KEY AUTOINCREMENT");
-		else if(notNull)
+		}
+		else if(notNull) {
 			result.append(" NOT NULL");
+		}
+
+		if(reference != null) {
+			String sql = reference.getSql();
+			if(sql != null) {
+				result.append(" ").append(sql);
+			}
+		}
+
 		return(result.toString());
 	}
 
@@ -118,6 +131,14 @@ public class Column extends SqlColumn {
 
 	public String getNameEscaped() {
 		return(escape(name));
+	}
+
+	public void setReference(SqlReference reference) {
+		this.reference = reference;
+	}
+
+	public SqlReference getReference() {
+		return(reference);
 	}
 
 }

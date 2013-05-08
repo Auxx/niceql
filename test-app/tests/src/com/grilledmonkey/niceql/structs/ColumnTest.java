@@ -31,4 +31,12 @@ public class ColumnTest extends AndroidTestCase {
 		assertEquals("\"_id\" INTEGER  PRIMARY KEY AUTOINCREMENT", new Column().getSql());
 		assertEquals("\"title\" TEXT NOT NULL", new Column(COLUMN_NAME, SqlColumn.TEXT, true).getSql());
 	}
+
+	public void testGetSqlWithRef() {
+		Column column = new Column(COLUMN_NAME, SqlColumn.TEXT, true);
+		Reference reference = new Reference("table");
+		reference.addColumn("user_id");
+		column.setReference(reference);
+		assertEquals("\"title\" TEXT NOT NULL REFERENCES table(\"user_id\")", column.getSql());
+	}
 }

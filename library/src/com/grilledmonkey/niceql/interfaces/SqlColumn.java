@@ -59,6 +59,20 @@ public abstract class SqlColumn implements SqlStatement {
 	public abstract boolean isNotNull();
 
 	/**
+	 * Adds reference info to column.
+	 * 
+	 * @param reference
+	 */
+	public abstract void setReference(SqlReference reference);
+
+	/**
+	 * Returns reference info about column.
+	 * 
+	 * @return current reference
+	 */
+	public abstract SqlReference getReference();
+
+	/**
 	 * Escapes any string like the name of column. Input string is NOT checked
 	 * for correct syntax.
 	 *
