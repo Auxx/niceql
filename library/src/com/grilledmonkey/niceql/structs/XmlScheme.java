@@ -9,6 +9,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.res.Resources.NotFoundException;
 import android.util.Log;
+import java.util.*;
 
 /**
  * This is the same class as Scheme, but it introduces static parse method
@@ -208,10 +209,42 @@ public class XmlScheme extends Scheme {
 		}
 	}
 
-	private static Reference parseReference(XmlPullParser xml) {
+	private static Reference parseReference(XmlPullParser xml) throws XmlPullParserException, IOException {
 		String table = xml.getAttributeValue(null, TABLE_ATTR);
 		String options = xml.getAttributeValue(null, OPTIONS_ATTR);
+		Reference reference = null;
+		
+		int eventType = xml.next();
+		while(eventType != XmlPullParser.END_TAG) {
+			if(eventType == XmlPullParser.START_TAG) {
+				if(COLUMN_TAG.equals(xml.getName())) {
+					parseReferenceColumn(reference, xml);
+				}
+				/*if(REFERENCE_TAG.equals(xml.getName())) {
+					reference = parseReference(xml);
+				}*/
+				eventType = xml.next();
+			}
+		}
+		
+		if(table != null) {
+				reference = new Reference(table, options);
+				return(reference);
+		}
+		
 		return(null);
+	}
+	
+	private static void parseReferenceColumn(Reference reference, XmlPullParser xml) throws XmlPullParserException, IOException {
+		String name = xml.getAttributeValue(null, NAME_ATTR);
+		if(name != null) {
+			reference.addColumn(name);
+		}
+
+		int eventType = xml.next();
+		while(eventType != XmlPullParser.END_TAG) {
+			eventType = xml.next();
+		}
 	}
 
 	private static void parseIndex(Table table, XmlPullParser xml) throws XmlPullParserException, IOException {
