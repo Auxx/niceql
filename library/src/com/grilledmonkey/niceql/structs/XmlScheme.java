@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.res.Resources.NotFoundException;
 import android.util.Log;
 import java.util.*;
+import java.lang.ref.*;
 
 /**
  * This is the same class as Scheme, but it introduces static parse method
@@ -33,6 +34,7 @@ public class XmlScheme extends Scheme {
 	private static final String INDEX_TAG = "index";
 	private static final String SEED_TAG = "seed";
 	private static final String REFERENCE_TAG = "reference";
+	private static final String FOREIGN_KEY_TAG = "foreignKey";
 
 	private static final String VERSION_ATTR = "version";
 	private static final String NAME_ATTR = "name";
@@ -170,6 +172,9 @@ public class XmlScheme extends Scheme {
 					parseIndex(table, xml);
 				else if(SEED_TAG.equals(xml.getName()))
 					parseSeed(table, xml);
+				else if(FOREIGN_KEY_TAG.equals(xml.getName()))
+					parseForeignKey(xml);
+					
 			}
 			eventType = xml.next();
 		}
@@ -208,6 +213,23 @@ public class XmlScheme extends Scheme {
 			table.addColumn(column);
 		}
 	}
+	
+	private static void parseForeignKey(XmlPullParser xml) throws XmlPullParserException, IOException {
+		ForeignKey fk = null;
+		
+		int eventType = xml.next();
+		while(eventType != XmlPullParser.END_TAG) {
+			if(eventType == XmlPullParser.START_TAG) {
+				if(COLUMN_TAG.equals(xml.getName())) {
+					//parseReferenceColumn(reference, xml);
+				}
+				else if(REFERENCE_TAG.equals(xml.getName())) {
+					fk = new ForeignKey(parseReference(xml));
+				}
+				eventType = xml.next();
+			}
+		}
+	}
 
 	private static Reference parseReference(XmlPullParser xml) throws XmlPullParserException, IOException {
 		String table = xml.getAttributeValue(null, TABLE_ATTR);
@@ -220,9 +242,6 @@ public class XmlScheme extends Scheme {
 				if(COLUMN_TAG.equals(xml.getName())) {
 					parseReferenceColumn(reference, xml);
 				}
-				/*if(REFERENCE_TAG.equals(xml.getName())) {
-					reference = parseReference(xml);
-				}*/
 				eventType = xml.next();
 			}
 		}
