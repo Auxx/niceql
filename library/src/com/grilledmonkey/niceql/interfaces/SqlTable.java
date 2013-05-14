@@ -4,6 +4,8 @@ import java.util.List;
 
 import android.content.ContentValues;
 
+import com.grilledmonkey.niceql.structs.ForeignKey;
+
 /**
  * Interface representing SQLite table. Descendants may
  * initialize the way they want and must implement getters to retrieve
@@ -63,5 +65,19 @@ public interface SqlTable extends SqlMultiStatement {
 	 * @param seed
 	 */
 	public void addSeed(ContentValues seed);
+
+	/**
+	 * Adds new foreign key to table definition. <b>NO error checks performed!</b>
+	 * 
+	 * @param foreignKey
+	 */
+	public void addForeignKey(ForeignKey foreignKey);
+
+	/**
+	 * Returns a list of all foreign keys.
+	 * 
+	 * @return list
+	 */
+	public List<ForeignKey> getForeignKeys();
 
 }

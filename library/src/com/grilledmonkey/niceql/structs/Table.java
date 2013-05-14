@@ -26,6 +26,7 @@ public class Table implements SqlTable {
 	private final List<SqlColumn> columns = new LinkedList<SqlColumn>();
 	private final List<SqlIndex> indices = new LinkedList<SqlIndex>();
 	private final List<ContentValues> seeds = new LinkedList<ContentValues>();
+	private final List<ForeignKey> fks = new LinkedList<ForeignKey>();
 
 	/**
 	 * Creates table definition with PRIMARY KEY and name as specified.
@@ -103,5 +104,15 @@ public class Table implements SqlTable {
 		}
 
 		return(queryList);
+	}
+
+	@Override
+	public void addForeignKey(ForeignKey foreignKey) {
+		fks.add(foreignKey);
+	}
+
+	@Override
+	public List<ForeignKey> getForeignKeys() {
+		return(fks);
 	}
 }
