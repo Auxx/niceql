@@ -94,6 +94,15 @@ public class Table implements SqlTable {
 			columnSql[i] = columns.get(i).getSql();
 		result.append(TextUtils.join(", ", columnSql));
 
+		if(fks.size() > 0) {
+			for(ForeignKey fk: fks) {
+				String sql = fk.getSql();
+				if(!TextUtils.isEmpty(sql)) {
+					result.append(", ").append(sql);
+				}
+			}
+		}
+
 		result.append(");");
 		queryList.add(result.toString());
 

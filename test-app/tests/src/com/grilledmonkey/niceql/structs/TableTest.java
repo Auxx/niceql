@@ -41,6 +41,14 @@ public class TableTest extends AndroidTestCase {
 		assertEquals(2, table.getSeeds().size());
 	}
 
+	public void testAddForeignKey() {
+		Table table = new Table(TABLE_NAME, false);
+		table.addForeignKey(null);
+		table.addForeignKey(null);
+		table.addForeignKey(null);
+		assertEquals(3, table.getForeignKeys().size());
+	}
+
 	public void testGetSql() {
 		Table table = new Table(TABLE_NAME);
 		table.addColumn(new Column("title", SqlColumn.TEXT));
@@ -54,5 +62,20 @@ public class TableTest extends AndroidTestCase {
 		table.addIndex(index);
 		queries = table.getSql();
 		assertEquals(2, queries.size());
+	}
+
+	public void testGetSqlWithFK() {
+		Table table = new Table(TABLE_NAME);
+		table.addColumn(new Column("title", SqlColumn.TEXT));
+		table.addColumn(new Column("author_id", SqlColumn.INTEGER));
+
+		Reference reference = new Reference("authors");
+		reference.addColumn("id");
+		ForeignKey fk = new ForeignKey(reference);
+		fk.addColumn("author_id");
+		table.addForeignKey(fk);
+
+		List<String> queries = table.getSql();
+		assertEquals("CREATE TABLE table(\"_id\" INTEGER  PRIMARY KEY AUTOINCREMENT, \"title\" TEXT, \"author_id\" INTEGER, FOREIGN KEY(\"author_id\") REFERENCES authors(\"id\"));", queries.get(0));
 	}
 }

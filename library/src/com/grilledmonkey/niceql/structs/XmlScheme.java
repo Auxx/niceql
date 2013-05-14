@@ -9,8 +9,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.res.Resources.NotFoundException;
 import android.util.Log;
-import java.util.*;
-import java.lang.ref.*;
 
 /**
  * This is the same class as Scheme, but it introduces static parse method
@@ -173,8 +171,8 @@ public class XmlScheme extends Scheme {
 				else if(SEED_TAG.equals(xml.getName()))
 					parseSeed(table, xml);
 				else if(FOREIGN_KEY_TAG.equals(xml.getName()))
-					parseForeignKey(xml);
-					
+					parseForeignKey(table, xml);
+
 			}
 			eventType = xml.next();
 		}
@@ -213,21 +211,37 @@ public class XmlScheme extends Scheme {
 			table.addColumn(column);
 		}
 	}
-	
-	private static void parseForeignKey(XmlPullParser xml) throws XmlPullParserException, IOException {
-		ForeignKey fk = null;
-		
+
+	private static void parseForeignKey(Table table, XmlPullParser xml) throws XmlPullParserException, IOException {
+		ForeignKey fk = new ForeignKey();
+
 		int eventType = xml.next();
 		while(eventType != XmlPullParser.END_TAG) {
 			if(eventType == XmlPullParser.START_TAG) {
 				if(COLUMN_TAG.equals(xml.getName())) {
-					//parseReferenceColumn(reference, xml);
+					parseFKColumn(fk, xml);
 				}
 				else if(REFERENCE_TAG.equals(xml.getName())) {
-					fk = new ForeignKey(parseReference(xml));
+					fk.setReference(parseReference(xml));
 				}
 				eventType = xml.next();
 			}
+		}
+
+		if(fk != null) {
+			table.addForeignKey(fk);
+		}
+	}
+
+	private static void parseFKColumn(ForeignKey fk, XmlPullParser xml) throws XmlPullParserException, IOException {
+		String name = xml.getAttributeValue(null, NAME_ATTR);
+		if(name != null) {
+			fk.addColumn(name);
+		}
+
+		int eventType = xml.next();
+		while(eventType != XmlPullParser.END_TAG) {
+			eventType = xml.next();
 		}
 	}
 
@@ -235,7 +249,7 @@ public class XmlScheme extends Scheme {
 		String table = xml.getAttributeValue(null, TABLE_ATTR);
 		String options = xml.getAttributeValue(null, OPTIONS_ATTR);
 		Reference reference = null;
-		
+
 		int eventType = xml.next();
 		while(eventType != XmlPullParser.END_TAG) {
 			if(eventType == XmlPullParser.START_TAG) {
@@ -245,15 +259,15 @@ public class XmlScheme extends Scheme {
 				eventType = xml.next();
 			}
 		}
-		
+
 		if(table != null) {
-				reference = new Reference(table, options);
-				return(reference);
+			reference = new Reference(table, options);
+			return(reference);
 		}
-		
+
 		return(null);
 	}
-	
+
 	private static void parseReferenceColumn(Reference reference, XmlPullParser xml) throws XmlPullParserException, IOException {
 		String name = xml.getAttributeValue(null, NAME_ATTR);
 		if(name != null) {
