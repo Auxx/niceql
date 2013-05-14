@@ -10,8 +10,12 @@ import com.grilledmonkey.niceql.interfaces.SqlForeignKey;
 import com.grilledmonkey.niceql.interfaces.SqlReference;
 
 public class ForeignKey implements SqlForeignKey {
-	private final SqlReference reference;
+	private SqlReference reference;
 	private final List<Object> columns = new LinkedList<Object>();
+
+	public ForeignKey() {
+		this(null);
+	}
 
 	public ForeignKey(SqlReference reference) {
 		this.reference = reference;
@@ -23,6 +27,10 @@ public class ForeignKey implements SqlForeignKey {
 
 	public void addColumn(String column) {
 		columns.add(column);
+	}
+
+	public void setReference(SqlReference reference) {
+		this.reference = reference;
 	}
 
 	public SqlReference getReference() {
