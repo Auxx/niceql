@@ -76,4 +76,29 @@ public class XmlSchemeTest extends AndroidTestCase {
 		assertEquals(2, sql.size());
 		assertEquals("SELECT 2 FROM articles", sql.get(1));
 	}
+
+	public void testParseWithFK() throws XmlPullParserException, IOException {
+		XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+		XmlPullParser parser = factory.newPullParser();
+		parser.setInput(new StringReader("<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+				"<scheme version=\"1\">" +
+				"<table name=\"articles\" withPrimaryKey=\"true\">" +
+				"<column name=\"title\" type=\"TEXT\" notNull=\"true\" />" +
+				"<column name=\"author_id\" type=\"INTEGER\" />" +
+				"<foreignKey>" +
+				"<reference table=\"authors\">" +
+				"<column name=\"id\">" +
+				"</column>" +
+				"</reference>" +
+				"<column name=\"author_id\">" +
+				"</column>" +
+				"</foreignKey>" +
+				"</table>" +
+				"</scheme>"));
+		Scheme scheme = XmlScheme.parse(parser);
+
+		List<String> sql = scheme.getSql();
+		assertEquals(1, sql.size());
+		assertEquals("CREATE TABLE articles(\"_id\" INTEGER  PRIMARY KEY AUTOINCREMENT, \"title\" TEXT NOT NULL, \"author_id\" INTEGER, FOREIGN KEY(\"author_id\") REFERENCES authors(\"id\"));", sql.get(0));
+	}
 }

@@ -250,6 +250,10 @@ public class XmlScheme extends Scheme {
 		String options = xml.getAttributeValue(null, OPTIONS_ATTR);
 		Reference reference = null;
 
+		if(table != null) {
+			reference = new Reference(table, options);
+		}
+
 		int eventType = xml.next();
 		while(eventType != XmlPullParser.END_TAG) {
 			if(eventType == XmlPullParser.START_TAG) {
@@ -260,17 +264,12 @@ public class XmlScheme extends Scheme {
 			}
 		}
 
-		if(table != null) {
-			reference = new Reference(table, options);
-			return(reference);
-		}
-
-		return(null);
+		return(reference);
 	}
 
 	private static void parseReferenceColumn(Reference reference, XmlPullParser xml) throws XmlPullParserException, IOException {
 		String name = xml.getAttributeValue(null, NAME_ATTR);
-		if(name != null) {
+		if(name != null && reference != null) {
 			reference.addColumn(name);
 		}
 
