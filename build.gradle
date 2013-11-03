@@ -1,0 +1,23 @@
+buildscript {
+  repositories {
+    mavenLocal()
+    mavenCentral()
+  }
+  dependencies {
+    classpath 'com.android.tools.build:gradle:0.6.+'
+  }
+}
+
+allprojects {
+  group = 'com.grilledmonkey'
+  version = '1.0'
+
+  repositories {
+    mavenLocal()
+    mavenCentral()
+  }
+
+  tasks.withType(Compile) {
+    options.encoding = "UTF-8"
+  }
+}
