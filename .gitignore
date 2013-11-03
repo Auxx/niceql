@@ -13,6 +13,16 @@
 bin/
 gen/
 
+# Android Studio stuff
+.gradle/
+.idea/
+gradle/
+build/
+/local.properties
+.DS_Store
+gradlew
+gradlew.bat
+
 # Local configuration file (sdk path, etc)
 local.properties
 
