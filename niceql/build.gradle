@@ -6,12 +6,12 @@ android {
     compileSdkVersion 19
     buildToolsVersion "19.0.0"
 
-    debug {
+    buildTypes {
+        debug {
+        }
 
-    }
-
-    release {
-
+        release {
+        }
     }
 
     sourceSets {
